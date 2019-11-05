@@ -12,28 +12,25 @@ from sklearn.model_selection import train_test_split
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.densenet import DenseNet121
 from keras.applications import inception_v3,mobilenet,vgg19,resnet50,xception
-import tensorflow as tf
-import keras.backend as K
 from sklearn.utils import shuffle
 
 
 # reading the total training labels
-#"train_labels.csv" will have the labels of all the images 
+#"train_labels.csv" will have the labels of all the images
 file = pd.read_csv("../input/train_labels.csv")
-
 
 #'dd6dfed324f9fcb6f93f46f32fc800f2ec196be2 and 9369c7278ec8bcc6c880d99194de09fc2bd4efbe'
 # these two are the images with full black, which is not needed to train the model
-file =file[file['id'] != 'dd6dfed324f9fcb6f93f46f32fc800f2ec196be2'] 
+file =file[file['id'] != 'dd6dfed324f9fcb6f93f46f32fc800f2ec196be2']
 file =file[file['id'] != '9369c7278ec8bcc6c880d99194de09fc2bd4efbe']
 
 print("total number of images: ",file.shape)
 
-#values_counts will give the total number of different labels 
+#values_counts will give the total number of different labels
 file['label'].value_counts()
 
-#since the dataset is biased towards 'label 0'(no tumour) we are taking equal number of data 
-#from each label and then concatenating into one variable and shuffle it. 
+#since the dataset is biased towards 'label 0'(no tumour) we are taking equal number of data
+#from each label and then concatenating into one variable and shuffle it.
 f_0 = file[file['label'] == 0].sample(80000,random_state = 101)
 f_1 = file[file['label'] == 1].sample(80000,random_state = 101)
 file = pd.concat([f_0,f_1],axis=0).reset_index(drop = True)
@@ -163,8 +160,8 @@ datagen = ImageDataGenerator(rescale=1.0/255,
                 vertical_flip=True)
 
 #resizing all the images to 96 x 96
-train_gen = datagen.flow_from_directory('data/train_dataset/' , 
-                                        target_size = (96,96) , 
+train_gen = datagen.flow_from_directory('data/train_dataset/' ,
+                                        target_size = (96,96) ,
                                         batch_size = batch_size,
                                        class_mode ='categorical')
 
