@@ -216,7 +216,7 @@ patches('valid')
 
 # In[25]:
 
-from keras.layers import Conv2D,MaxPool2D,SeparableConv2D,Dropout,Flatten,Dense
+from keras.layers import Dropout,Flatten,Dense
 
 #function for building the pretrained architecture
 def pretrained_model(model):
