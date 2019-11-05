@@ -6,15 +6,12 @@
 
 import pandas as pd
 import numpy as np
-import keras
 import os
 import shutil
-import skimage.io as skio
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.densenet import DenseNet121
-from keras.applications import inception_v3,nasnet,mobilenet,vgg19,resnet50,xception
-import matplotlib.pyplot as plt
+from keras.applications import inception_v3,mobilenet,vgg19,resnet50,xception
 import tensorflow as tf
 import keras.backend as K
 from sklearn.utils import shuffle
@@ -48,7 +45,7 @@ file['label'].value_counts()
 y = file['label']
 
 #splitting the data for testing and training(20 and 80%) using train_test_split command imported from sklearn
-#random_state will always choose the same data for every trial and stratify is to take equal number of abnormal 
+#random_state will always choose the same data for every trial and stratify is to take equal number of abnormal
 #and normal data from total dataset
 x_train,x_valid = train_test_split(file,test_size = 0.20,random_state= 101,stratify=y)
 
@@ -159,7 +156,7 @@ epochs = 10
 # In[20]:
 
 
-#doing data augmentation - (creating more images from availbale images by normalising all the images 
+#doing data augmentation - (creating more images from availbale images by normalising all the images
 #flipping the images horizontally and vertically)
 datagen = ImageDataGenerator(rescale=1.0/255,
                 horizontal_flip=True,
@@ -222,8 +219,6 @@ patches('valid')
 
 # In[25]:
 
-
-from keras.models import Sequential
 from keras.layers import Conv2D,MaxPool2D,SeparableConv2D,Dropout,Flatten,Dense,BatchNormalization,GlobalAveragePooling2D
 from keras import layers,models
 from keras import initializers
@@ -322,7 +317,7 @@ os.listdir('test_dir/')
 
 test_list = os.listdir('../input/test')
 
-#moving all the test images to test folder 
+#moving all the test images to test folder
 for image in test_list:
     
     fname = image
@@ -372,7 +367,7 @@ test_preds.shape
 #Store those values in dataframe
 f_preds = pd.DataFrame(test_preds, columns=['label'])
 
-f_preds.head()
+print(f_preds.head())
 
 #extracting filenames of each test data
 test_filenames = test_gen.filenames
@@ -395,11 +390,9 @@ def extract_id(x):
 
 f_preds['id'] = f_preds['file_names'].apply(extract_id)
 f_preds.head()
-
 #final submission file with two columns (1 - image id's and 2 - label predicted)
 submission = pd.DataFrame({'id':f_preds['id'], 
                            'label':f_preds['label'], 
                           }).set_index('id')
 
 submission.to_csv('submission_dense.csv', columns=['label'])
-
