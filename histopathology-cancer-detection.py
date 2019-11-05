@@ -300,7 +300,6 @@ shutil.rmtree('data')
 # create test_dir
 test_dir = 'test_dir'
 os.mkdir(test_dir)
-    
 # create test_images inside test_dir
 test_images = os.path.join(test_dir, 'test_images')
 os.mkdir(test_images)
