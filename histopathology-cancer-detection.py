@@ -216,8 +216,7 @@ patches('valid')
 
 # In[25]:
 
-from keras.layers import Conv2D,MaxPool2D,SeparableConv2D,Dropout,Flatten,Dense,BatchNormalization
-from keras import model
+from keras.layers import Conv2D,MaxPool2D,SeparableConv2D,Dropout,Flatten,Dense
 
 #function for building the pretrained architecture
 def pretrained_model(model):
@@ -313,9 +312,7 @@ test_list = os.listdir('../input/test')
 
 #moving all the test images to test folder
 for image in test_list:
-    
     fname = image
-    
     # source path to image
     src = os.path.join('../input/test', fname)
     # destination path to image
