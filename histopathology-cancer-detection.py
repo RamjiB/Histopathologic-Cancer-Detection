@@ -216,11 +216,8 @@ patches('valid')
 
 # In[25]:
 
-from keras.layers import Conv2D,MaxPool2D,SeparableConv2D,Dropout,Flatten,Dense,BatchNormalization,GlobalAveragePooling2D
-from keras import layers,models
-from keras import initializers
-
-
+from keras.layers import Conv2D,MaxPool2D,SeparableConv2D,Dropout,Flatten,Dense,BatchNormalization
+from keras import model
 
 #function for building the pretrained architecture
 def pretrained_model(model):
@@ -254,9 +251,9 @@ main_model.summary()
 
 
 from keras.callbacks import ModelCheckpoint,ReduceLROnPlateau,CSVLogger
-from keras.optimizers import Adam,RMSprop
+from keras.optimizers import Adam
 
-#CSV_Logger is to store all the accuracy and loss values into a csv file for every epoch 
+#CSV_Logger is to store all the accuracy and loss values into a csv file for every epoch
 #ModelCheckpoint is to save the best models amoung all the epochs
 #Learning rate starts at 0.001 should keep on reducing at the factor of 0.1 if there is no change in validation accuracy
 
@@ -284,7 +281,7 @@ steps_p_ep_tr =np.ceil(len(x_train)/batch_size)
 steps_p_ep_va =np.ceil(len(x_valid)/batch_size)
 
 
-main_model.compile(optimizer = Adam(lr=0.0001), 
+main_model.compile(optimizer = Adam(lr=0.0001),
               loss = 'binary_crossentropy', metrics=['accuracy'])
 
 #training the model for all the images
@@ -334,7 +331,6 @@ test_gen = datagen.flow_from_directory('test_dir/',target_size = (96,96),
                     batch_size = batch_size,
                     class_mode='categorical',
                     shuffle= False)
-# 
 def te(te_gen):
     for x,y in te_gen:
         yield ([x,y],[y,x])
@@ -354,12 +350,12 @@ predictions = main_model.predict_generator(test_gen, steps=57458, verbose=1)
 # In[44]:
 
 
-predictions.shape
+print(predictions.shape)
 
 #model predicted will be of probability values but our model shoudl have either 0 or 1
 # so take the position of maximum values for each data
 test_preds = np.argmax(predictions,axis = 1)
-test_preds.shape
+print(test_preds.shape)
 
 #Store those values in dataframe
 f_preds = pd.DataFrame(test_preds, columns=['label'])
@@ -376,20 +372,18 @@ f_preds.head()
 
 #function to etract only the id of all the test images
 def extract_id(x):
-    
     # split into a list
     a = x.split('/')
     # split into a list
     b = a[1].split('.')
     extracted_id = b[0]
-    
     return extracted_id
 
 f_preds['id'] = f_preds['file_names'].apply(extract_id)
 f_preds.head()
 #final submission file with two columns (1 - image id's and 2 - label predicted)
-submission = pd.DataFrame({'id':f_preds['id'], 
-                           'label':f_preds['label'], 
+submission = pd.DataFrame({'id':f_preds['id'],
+                           'label':f_preds['label'],
                           }).set_index('id')
 
 submission.to_csv('submission_dense.csv', columns=['label'])
