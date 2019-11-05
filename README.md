@@ -5,8 +5,8 @@ is having benign or malignant tumour cells in its center 32 x 32 pixel.
 
 ## DATASET
 
-* Train data - 220,025
-* Test  data - 57,458
+* Train data  - 220,025
+* Test  data  - 57,458
 
 ### NOTE
 
